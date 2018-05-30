@@ -17,7 +17,7 @@ with open(path, newline='') as lookup:
         break
 
 # this is where the real chunk begins. stating the variables now. Setting
-# the rev to the startnumb calculated 
+# the rev to the startnumb calculated, and others to zero
 rev = startrev
 revsum = 0
 changesum = 0
@@ -33,15 +33,26 @@ with open(path, newline='') as lookup:
     for i, x in enumerate(reader):
         
         change = int(x[1]) - rev #for the first iteration it should be zero, hence startrev
-        if change>maxchange:
+        
+        # as the reader reads the csv file, it stores the max and min values
+        # and the month assisiated with the max/min. These values get updated 
+        # as it continues to read the file and only stores key information
+        if change > maxchange:
             maxchange = change
             maxmon = x[0]
-        if change<minchange:
+        
+        if change < minchange:
             minchange = change
             minmon = x[0]
 
+        # revenue in captured after the conditions are checked, since a change 
+        # means refrencing past vs present. It acts as present here, while past
+        # in the lines above for comparison
         rev = int(x[1])
 
+        # as the reader reads the file, it keeps adding to the previous count
+        # thus creating a total sum at the end of the loop
+        # (x = x + 1)  == (x += 1)
         revsum += rev
         changesum += change
 
@@ -55,3 +66,16 @@ print(f'Total Revenue: ${revsum}')
 print(f'Average Revenue Change: ${round(avg,2)}')
 print(f'Greatest Increase in Rev: {maxmon}, ${maxchange}')
 print(f'Greatest Decrease in Rev: {minmon}, ${minchange}\n')
+
+
+# Will now write the files to an ouput csv file
+filename='output_data1.txt'
+outpath = os.path.join(filename)
+with open(outpath, "w") as writer:
+    
+    writer.write("Financial Analysis \n------------------------")
+    writer.write(f'\nTotal Months: {i+1}')
+    writer.write(f'\nTotal Revenue: ${revsum}')
+    writer.write(f'\nAverage Revenue Change: ${round(avg,2)}')
+    writer.write(f'\nGreatest Increase in Rev: {maxmon}, ${maxchange}')
+    writer.write(f'\nGreatest Decrease in Rev: {minmon}, ${minchange}')
