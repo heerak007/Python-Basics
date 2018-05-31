@@ -39,7 +39,7 @@ winner = count.index(max(count))
 print("\nElection Results \n------------------------")
 print(f"Total Votes: {total} \n------------------------")
 # doing a for loop because we do not know the number of candidadates
-# so the length of candidates[] can do that for us
+# so the length of candidates[] can do that 
 for i in range(len(candidates)):
     print(f"{candidates[i]}: {'{:.1%}'.format(float(count[i]/total))}  ({count[i]})")
 print(f"------------------------\nWinner is: {candidates[winner]}\n")
